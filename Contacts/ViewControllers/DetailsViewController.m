@@ -10,7 +10,7 @@
 #import "DataBaseManager.h"
 #import "FileManager.h"
 
-@interface DetailsViewController ()
+@interface DetailsViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *saveButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *editContactButtonItem;
@@ -148,7 +148,27 @@
 
 - (void)didTapImageView:(UITapGestureRecognizer *)gestureRecognizer
 {
-    NSLog(@"Did Tap on Profile Image");
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        
+        UIImagePickerController *pickerController = [[UIImagePickerController alloc] init];
+        pickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+        pickerController.delegate = self;
+        
+        [self presentViewController:pickerController
+                           animated:YES
+                         completion:NULL];
+    }
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:^{
+       
+        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        [self.profileImageView setImage:image];
+    }];
 }
 
 #pragma mark - Auxiliary methods
