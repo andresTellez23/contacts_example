@@ -28,6 +28,7 @@
     
     self.title = self.contact.name;
     [self.profileImageView setImage:[UIImage imageNamed:@"profile_picture"]];
+    [self setupGestureRecognizers];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -41,6 +42,21 @@
     
     [self enterEditableMode:self.editMode];
     [self loadContact:self.contact];
+}
+
+#pragma mark - Setup
+
+- (void)setupGestureRecognizers
+{
+    [self addTapGestureToImageView];
+}
+
+- (void)addTapGestureToImageView
+{
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapImageView:)];
+    tapGesture.numberOfTapsRequired = 1;
+    
+    [self.profileImageView addGestureRecognizer:tapGesture];
 }
 
 #pragma mark - Setters and getters
@@ -130,6 +146,11 @@
     [self enterEditableMode:EditMode_Edit];
 }
 
+- (void)didTapImageView:(UITapGestureRecognizer *)gestureRecognizer
+{
+    NSLog(@"Did Tap on Profile Image");
+}
+
 #pragma mark - Auxiliary methods
 
 - (void)enterEditableMode:(EditMode)editMode
@@ -138,6 +159,7 @@
     
     BOOL enabled = (editMode == EditMode_Edit || editMode == EditMode_New);
     
+    self.profileImageView.userInteractionEnabled = enabled;
     self.nameTextField.enabled = enabled;
     self.lastNameTextField.enabled = enabled;
     self.phoneNumberTextField.enabled = enabled;
