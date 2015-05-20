@@ -48,7 +48,7 @@
         contact3.phoneNumber = 3157777777;
         Contact *contact4 = [[Contact alloc] initWithID:4 name:@"Diana" lastName:@"Granados"];
         contact4.job = @"Programadora";
-        Contact *contact5 = [[Contact alloc] initWithID:5 name:@"Steven"];
+        Contact *contact5 = [[Contact alloc] initWithID:5 name:@"Reinner Steven"];
         contact5.phoneNumber = 3159999999;
         Contact *contact6 = [[Contact alloc] initWithID:6 name:@"Andrés" lastName:@"Tellez"];
         contact6.job = @"Estudiante";
