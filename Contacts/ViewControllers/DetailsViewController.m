@@ -99,6 +99,8 @@
     
     self.contact = contact;
     
+     NSString *nameImage = [ NSString stringWithFormat:@"%ld",self.contact.ID ];
+    
     if (self.editMode == EditMode_New) {
         
         [[DataBaseManager sharedManager] insertContact:contact];
@@ -108,6 +110,7 @@
         [[DataBaseManager sharedManager] replaceContactWithID:self.contact.ID withContact:self.contact];
     }
     
+    [FileManager writeImageToFile:self.profileImageView.image withName: nameImage];
     
     [self enterEditableMode:EditMode_None];
 }
