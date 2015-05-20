@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UIBarButtonItem *saveButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *editContactButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *canelButtonItem;
+@property (nonatomic,strong) UIAlertView * messageAlert;
 
 @end
 
@@ -114,7 +115,7 @@
     contact.address = self.addressTextField.text;
     
     
-    if(self.profileImageView.image == [UIImage imageNamed:@"Profiel"]){
+    if(self.profileImageView.image == [UIImage imageNamed:@"profiel_picture"]){
         
         NSLog(@"Imagen  Guardada");
         
@@ -170,6 +171,11 @@
         [self presentViewController:pickerController
                            animated:YES
                          completion:NULL];
+    }
+    else{
+        self.messageAlert = [[UIAlertView alloc] initWithTitle:@"Error en Camara" message:@"Camara no Disponible" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+        
+        [self.messageAlert show];
     }
 }
 
