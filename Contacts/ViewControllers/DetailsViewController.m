@@ -10,7 +10,7 @@
 #import "DataBaseManager.h"
 #import "FileManager.h"
 
-@interface DetailsViewController ()
+@interface DetailsViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *saveButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *editContactButtonItem;
@@ -28,6 +28,7 @@
     
     self.title = self.contact.name;
     [self.profileImageView setImage:[UIImage imageNamed:@"profile_picture"]];
+    [self setupGestureRecognizers];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -41,6 +42,21 @@
     
     [self enterEditableMode:self.editMode];
     [self loadContact:self.contact];
+}
+
+#pragma mark - Setup
+
+- (void)setupGestureRecognizers
+{
+    [self addTapGestureToImageView];
+}
+
+- (void)addTapGestureToImageView
+{
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapImageView:)];
+    tapGesture.numberOfTapsRequired = 1;
+    
+    [self.profileImageView addGestureRecognizer:tapGesture];
 }
 
 #pragma mark - Setters and getters
@@ -143,6 +159,31 @@
     [self enterEditableMode:EditMode_Edit];
 }
 
+- (void)didTapImageView:(UITapGestureRecognizer *)gestureRecognizer
+{
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        
+        UIImagePickerController *pickerController = [[UIImagePickerController alloc] init];
+        pickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+        pickerController.delegate = self;
+        
+        [self presentViewController:pickerController
+                           animated:YES
+                         completion:NULL];
+    }
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:^{
+       
+        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        [self.profileImageView setImage:image];
+    }];
+}
+
 #pragma mark - Auxiliary methods
 
 - (void)enterEditableMode:(EditMode)editMode
@@ -151,6 +192,7 @@
     
     BOOL enabled = (editMode == EditMode_Edit || editMode == EditMode_New);
     
+    self.profileImageView.userInteractionEnabled = enabled;
     self.nameTextField.enabled = enabled;
     self.lastNameTextField.enabled = enabled;
     self.phoneNumberTextField.enabled = enabled;
