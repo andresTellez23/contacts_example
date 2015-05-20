@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UIBarButtonItem *saveButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *editContactButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *canelButtonItem;
+@property (nonatomic, assign) BOOL didTakePicture;
 
 @end
 
@@ -115,8 +116,6 @@
     
     self.contact = contact;
     
-     NSString *nameImage = [ NSString stringWithFormat:@"%ld",self.contact.ID ];
-    
     if (self.editMode == EditMode_New) {
         
         [[DataBaseManager sharedManager] insertContact:contact];
@@ -126,7 +125,13 @@
         [[DataBaseManager sharedManager] replaceContactWithID:self.contact.ID withContact:self.contact];
     }
     
-    [FileManager writeImageToFile:self.profileImageView.image withName: nameImage];
+    if (self.didTakePicture) {
+        
+        NSString *nameImage = [ NSString stringWithFormat:@"%ld",self.contact.ID ];
+        [FileManager writeImageToFile:self.profileImageView.image withName: nameImage];
+        
+        self.didTakePicture = NO;
+    }
     
     [self enterEditableMode:EditMode_None];
 }
@@ -167,6 +172,8 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+    self.didTakePicture = YES;
+    
     [picker dismissViewControllerAnimated:YES completion:^{
        
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
