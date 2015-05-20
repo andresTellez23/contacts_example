@@ -97,6 +97,19 @@
     contact.email = self.emailTextField.text;
     contact.address = self.addressTextField.text;
     
+    
+    if(self.profileImageView.image == [UIImage imageNamed:@"Profiel"]){
+        
+        NSLog(@"Imagen  Guardada");
+        
+        UIImage *image = self.profileImageView.image;
+        [FileManager writeImageToFile:image withName:
+         [NSString stringWithFormat:@"%ld", (long)[[DataBaseManager sharedManager] getNumberOfContacts]+1]];
+    }
+   
+    
+    else{ NSLog(@"Imagen no Guardada"); }
+    
     self.contact = contact;
     
     if (self.editMode == EditMode_New) {
