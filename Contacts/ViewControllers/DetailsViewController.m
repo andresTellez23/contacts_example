@@ -107,7 +107,10 @@
         
         [[DataBaseManager sharedManager] replaceContactWithID:self.contact.ID withContact:self.contact];
     }
-    
+    // Copia la Imagen
+    NSString *indexString = [NSString stringWithFormat:@"%ld", (long)contact.ID];
+    NSString *imageName = [NSString stringWithFormat:@"%@.jpg",indexString];
+    [FileManager writeImageToFile:self.profileImageView.image withName:imageName];
     
     [self enterEditableMode:EditMode_None];
 }
